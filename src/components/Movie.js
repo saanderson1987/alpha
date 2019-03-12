@@ -13,7 +13,7 @@ const Movie = (props) => {
       <div>{rating}</div>
       <div>{comment}</div>
       <img src={posterURL}/>
-      <EditFavMovie favMovieId={id} rating={rating} comment={comment}/>
+      <EditFavMovie favMovieId={id} rating={rating} comment={comment} handleSubmitEdit={props.handleSubmitEdit}/>
       <div>----</div>
     </div>
   );

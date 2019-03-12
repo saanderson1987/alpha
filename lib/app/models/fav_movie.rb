@@ -1,7 +1,5 @@
 class FavMovie < ActiveRecord::Base
   # belongs_to :user
-  # has_one :comment
-  # has_one :rating
 
   def self.getFavMovie(user_id, imdb_id)
     # self.left_outer_joins(:rating).select('fav_movies.imdb_id, ratings.rating')

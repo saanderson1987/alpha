@@ -1,13 +1,15 @@
 import React from 'react';
-import { searchMovies, getFavMovie } from '../api-calls';
+import { searchMovies, getFavMovie, updateFavMovie } from '../api-calls';
+import merge from 'lodash/merge';
 import Movie from './Movie';
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: '', movies: []};
+    this.state = {value: '', moviesByImdbId: {}};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleSubmitEdit = this.handleSubmitEdit.bind(this);
   }
 
   handleChange(event) {
@@ -18,25 +20,39 @@ class Search extends React.Component {
     event.preventDefault();
     searchMovies(this.state.value)
       .then(movies => {
+        const moviesByImdbId = {}
         const getFavMoviePromises = [];
         for(let i = 0; i < movies.length; i++) {
           function getFavMovieInfo(i) {
             const { imdbID } = movies[i];
-            getFavMoviePromises.push(getFavMovie(imdbID))
+            getFavMoviePromises.push(getFavMovie(imdbID));
+            moviesByImdbId[imdbID] = movies[i];
           }
-          getFavMovieInfo(i)
+          getFavMovieInfo(i);
         }
+        this.setState({moviesByImdbId});
         Promise.all(getFavMoviePromises).then(favMovies => {
           favMovies.forEach((favMovie, i) => {
-            movies[i] =Object.assign({}, movies[i], favMovie);
+            movies[i] = Object.assign({}, movies[i], favMovie);
+            const { imdbID } = movies[i];
+            moviesByImdbId[imdbID] = movies[i];
           });
-          this.setState({movies})
+          this.setState({moviesByImdbId})
         })
       });
   }
 
+  handleSubmitEdit({favMovieId, rating, comment}) {
+    updateFavMovie({favMovieId, rating, comment})
+      .then(updatedMovie => {
+        const moviesByImdbId = merge(this.state.moviesByImdbId, {[updatedMovie.imdb_id]: updatedMovie});
+        this.setState({moviesByImdbId});
+      })
+  }
+
   render() {
-    const { value, movies } = this.state;
+    const { value, moviesByImdbId } = this.state;
+    const movies = Object.values(moviesByImdbId);
     return (
       <div>
         Search
@@ -49,7 +65,7 @@ class Search extends React.Component {
         </form>
         {movies.map(movie => {
           return (
-            <Movie key={movie.imdbID} movie={movie}/>
+            <Movie key={movie.imdbID} movie={movie} handleSubmitEdit={this.handleSubmitEdit}/>
           );
         })}
       </div>

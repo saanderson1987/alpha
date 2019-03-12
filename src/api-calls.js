@@ -14,8 +14,8 @@ export function getMovieByImdbId (imdbId) {
 
 export function getFavMovie (imdbId) {
   return fetch(`favMovie?user_id=${USER_ID}&imdb_id=${imdbId}`)
-    .then(res => res.json()
-    .then(resJSON => resJSON[0]))
+    .then(res => res.json())
+    // .then(resJSON => resJSON[0]))
 }
 
 export function getFavMovies () {
@@ -23,34 +23,10 @@ export function getFavMovies () {
     .then(res => res.json())
 }
 
-export function updateRating(favMovieId, rating) {
-  return fetch(`ratings`, {
+export function updateFavMovie({favMovieId, rating, comment}) {
+  return fetch(`favMovies`, {
     method: 'post',
-    body: JSON.stringify({favMovieId, rating})
+    body: JSON.stringify({favMovieId, rating, comment})
   })
     .then(res => res.json())
 }
-
-export function updateComment(favMovieId, comment) {
-  return fetch(`comments`, {
-    method: 'post',
-    body: JSON.stringify({favMovieId, comment})
-  })
-    .then(res => res.json())
-}
-
-// fetch('http://www.omdbapi.com/?apikey=569a050d&t=interview with the vampire')
-//   .then(function(response) {
-//     return response.json();
-//   })
-//   .then(function(myJson) {
-//     console.log(JSON.stringify(myJson));
-//   });
-
-// fetch('/users')
-// .then(function(response) {
-//   return response.json();
-// })
-// .then(function(myJson) {
-//   console.log(JSON.stringify(myJson));
-// });

@@ -1,5 +1,4 @@
 import React from 'react';
-import { updateRating, updateComment } from '../api-calls';
 
 class EditFavMovie extends React.Component {
   constructor(props) {
@@ -9,6 +8,13 @@ class EditFavMovie extends React.Component {
     this.state = { toggleEdit: false, rating, comment };
     this.toggleEdit = this.toggleEdit.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.rating !== prevProps.rating || this.props.comment !== prevProps.comment) {
+      const { rating, comment } = this.props;
+      this.setState({rating, comment});
+    }
   }
 
   toggleEdit() {
@@ -24,8 +30,9 @@ class EditFavMovie extends React.Component {
     e.preventDefault();
     const { favMovieId } = this.props;
     const { rating, comment } = this.state;
-    updateRating(favMovieId, rating);
-    updateComment(favMovieId, comment)
+    this.props.handleSubmitEdit({favMovieId, rating, comment});
+    // updateRating(favMovieId, rating);
+    // updateComment(favMovieId, comment)
   }
 
   render() {
