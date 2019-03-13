@@ -27,7 +27,6 @@ get '/favMovie' do
   content_type :json
   user_id = params[:user_id]
   imdb_id = params[:imdb_id]
-  # @favMovie = FavMovie.getFavMovie(user_id, imdb_id)
   @favMovie = FavMovie.find_by(user_id: user_id, imdb_id: imdb_id)
   @favMovie.to_json
 end
@@ -35,7 +34,6 @@ end
 get '/favMovies' do
   content_type :json
   user_id = params[:user_id]
-  # @favMovies = FavMovie.getFavMovies(user_id)
   @favMovies = FavMovie.where(user_id: user_id)
   @favMovies.to_json
 end 
@@ -44,33 +42,8 @@ post '/favMovies' do
   content_type :json
   request.body.rewind
   data = JSON.parse request.body.read
-  puts data
   if @favMovie = FavMovie.find_by(id: data['favMovieId'])
     @favMovie.update(rating: data['rating'], comment: data['comment'])
     @favMovie.to_json
   end
 end 
-
-# post '/ratings' do
-#   content_type :json
-#   request.body.rewind
-#   data = JSON.parse request.body.read
-#   puts data
-#   if @rating = Rating.find_by(fav_movie_id: data['favMovieId'])
-#     @rating.update(rating: data['rating']).to_json
-#   else
-#     Rating.create(fav_movie_id: data['favMovieId'], rating: data['rating']).to_json
-#   end
-# end
-
-# post '/comments' do
-#   content_type :json
-#   request.body.rewind
-#   data = JSON.parse request.body.read
-#   puts data
-#   if @comment = Comment.find_by(fav_movie_id: data['favMovieId'])
-#     @comment.update(comment: data['comment']).to_json
-#   else
-#     Comment.create(fav_movie_id: data['favMovieId'], comment: data['comment']).to_json
-#   end
-# end

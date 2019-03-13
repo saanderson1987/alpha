@@ -1,21 +1,42 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import '../assets/styles/App.scss';
+import styled, { css } from 'styled-components'
+import NavBar from './NavBar';
 import Search from './Search';
 import FavMovieList from './FavMovieList';
 
-const App = () => {
-  return (
-    <div>
-      <h1>Hello</h1>
-      <Search />
-      <FavMovieList />
-    </div>
-  );
-};
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {selectedView: 'search'};
+    this.changeSelectedView = this.changeSelectedView.bind(this);
+  }
 
-App.propTypes = {
-  name: PropTypes.string,
-};
+  changeSelectedView(view) {
+    if (view !== this.state.selectedView) {
+      this.setState({selectedView: view});
+    }
+  }
+
+  render() {
+    const { selectedView } = this.state;
+    return (
+      <div>
+        <NavBar selectedView={selectedView} changeSelectedView={this.changeSelectedView} />
+        <AppBody>
+          {selectedView === 'search' ?
+            <Search /> : ''
+          }
+          {selectedView === 'favMovie' ?
+            <FavMovieList /> : ''
+          }
+        </AppBody>
+      </div>
+    );
+  }
+}
 
 export default App;
+
+const AppBody = styled.div`
+  margin: 40px;
+`

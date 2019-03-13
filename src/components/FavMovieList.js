@@ -33,11 +33,10 @@ class FavMovieList extends React.Component {
   }
 
   handleSubmitEdit({favMovieId, rating, comment}) {
-    updateFavMovie({favMovieId, rating, comment})
+    return updateFavMovie({favMovieId, rating, comment})
       .then(updatedMovie => {
         const favMoviesByImdbId = merge(this.state.favMoviesByImdbId, {[updatedMovie.imdb_id]: updatedMovie});
         this.setState({favMoviesByImdbId});
-        console.log(this.state);
       })
   }
 
@@ -46,7 +45,6 @@ class FavMovieList extends React.Component {
     const favMovies = Object.values(this.state.favMoviesByImdbId);
     return (
       <div>
-        <h2>Favorite Movies</h2>
         {favMovies.map(favMovie => {
           return (
             <Movie key={favMovie.id} movie={favMovie} handleSubmitEdit={this.handleSubmitEdit}/>
