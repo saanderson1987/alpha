@@ -31,8 +31,6 @@ class EditFavMovie extends React.Component {
     const { favMovieId } = this.props;
     const { rating, comment } = this.state;
     this.props.handleSubmitEdit({favMovieId, rating, comment});
-    // updateRating(favMovieId, rating);
-    // updateComment(favMovieId, comment)
   }
 
   render() {

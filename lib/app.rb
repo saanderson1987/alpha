@@ -38,12 +38,26 @@ get '/favMovies' do
   @favMovies.to_json
 end 
 
+put '/favMovies/:id' do 
+  content_type :json
+  request.body.rewind
+  data = JSON.parse request.body.read
+  if @favMovie = FavMovie.find_by(id: params[:id])
+    @favMovie.update(rating: data['rating'], comment: data['comment'])
+    @favMovie.to_json
+  end
+end 
+
 post '/favMovies' do 
   content_type :json
   request.body.rewind
   data = JSON.parse request.body.read
-  if @favMovie = FavMovie.find_by(id: data['favMovieId'])
-    @favMovie.update(rating: data['rating'], comment: data['comment'])
-    @favMovie.to_json
-  end
+  @favMovie = FavMovie.create(data['favMovie'])
+  @favMovie.to_json
+end 
+
+delete '/favMovies/:id' do 
+  content_type :json
+  @favMovie = FavMovie.destroy(params[:id])
+  @favMovie.to_json
 end 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { getFavMovies, getMovieByImdbId, updateFavMovie } from '../api-calls';
+import { getFavMovies, getMovieByImdbId, updateFavMovie, deleteFavMovie } from '../api-calls';
 import merge from 'lodash/merge';
 import Movie from './Movie';
 
@@ -8,6 +8,7 @@ class FavMovieList extends React.Component {
     super(props);
     this.state = {};
     this.handleSubmitEdit = this.handleSubmitEdit.bind(this);
+    this.removeFavMovie = this.removeFavMovie.bind(this);
   }
 
   componentDidMount() {
@@ -40,6 +41,15 @@ class FavMovieList extends React.Component {
       })
   }
 
+  removeFavMovie(favMovieId) {
+    return deleteFavMovie(favMovieId)
+      .then(deletedFavMovie => {
+        const favMoviesByImdbId = Object.assign({}, this.state.favMoviesByImdbId);
+        delete favMoviesByImdbId[deletedFavMovie.imdb_id];
+        this.setState({favMoviesByImdbId});
+      })
+  }
+
   render() {
     if (!this.state.favMoviesByImdbId) return (<div>Loading</div>)
     const favMovies = Object.values(this.state.favMoviesByImdbId);
@@ -47,7 +57,7 @@ class FavMovieList extends React.Component {
       <div>
         {favMovies.map(favMovie => {
           return (
-            <Movie key={favMovie.id} movie={favMovie} handleSubmitEdit={this.handleSubmitEdit}/>
+            <Movie key={favMovie.id} movie={favMovie} handleSubmitEdit={this.handleSubmitEdit} removeFavMovie={this.removeFavMovie}/>
           );
         })}
       </div>

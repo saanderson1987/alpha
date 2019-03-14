@@ -1,16 +1,18 @@
 import React from 'react';
 import styled, { css } from 'styled-components'
-import { searchMovies, getFavMovie, updateFavMovie } from '../api-calls';
+import { searchMovies, getFavMovie, updateFavMovie, createFavMovie, deleteFavMovie } from '../api-calls';
 import merge from 'lodash/merge';
 import Movie from './Movie';
 
 class Search extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {value: '', moviesByImdbId: {}, loading: false};
+    this.state = {value: '', moviesByImdbId: {}, isLoading: false, error: ''};
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleSubmitEdit = this.handleSubmitEdit.bind(this);
+    this.addToFavMovies = this.addToFavMovies.bind(this);
+    this.removeFavMovie = this.removeFavMovie.bind(this);
   }
 
   handleChange(event) {
@@ -19,42 +21,66 @@ class Search extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.setState({loading: true})
+    this.setState({isLoading: true, error: ''})
     searchMovies(this.state.value)
-      .then(movies => {
-        const moviesByImdbId = {}
-        const getFavMoviePromises = [];
-        for(let i = 0; i < movies.length; i++) {
-          function getFavMovieInfo(i) {
-            const { imdbID } = movies[i];
-            getFavMoviePromises.push(getFavMovie(imdbID));
-            moviesByImdbId[imdbID] = movies[i];
+      .then(res => {
+        if (res.Response === "True") {
+          const movies = res.Search;
+          const moviesByImdbId = {};
+          const getFavMoviePromises = [];
+          for(let i = 0; i < movies.length; i++) {
+            function getFavMovieInfo(i) {
+              const { imdbID } = movies[i];
+              getFavMoviePromises.push(getFavMovie(imdbID));
+              moviesByImdbId[imdbID] = movies[i];
+            }
+            getFavMovieInfo(i);
           }
-          getFavMovieInfo(i);
+          this.setState({moviesByImdbId});
+          Promise.all(getFavMoviePromises).then(favMovies => {
+            favMovies.forEach((favMovie, i) => {
+              movies[i] = Object.assign({}, movies[i], favMovie);
+              const { imdbID } = movies[i];
+              moviesByImdbId[imdbID] = movies[i];
+            });
+            this.setState({moviesByImdbId, isLoading: false})
+          })
         }
-        console.log(movies)
-        this.setState({moviesByImdbId});
-        Promise.all(getFavMoviePromises).then(favMovies => {
-          favMovies.forEach((favMovie, i) => {
-            movies[i] = Object.assign({}, movies[i], favMovie);
-            const { imdbID } = movies[i];
-            moviesByImdbId[imdbID] = movies[i];
-          });
-          this.setState({moviesByImdbId, loading: false})
-        })
+        else {
+          this.setState({error: res.Error, isLoading: false})
+        }
       });
   }
 
   handleSubmitEdit({favMovieId, rating, comment}) {
-    updateFavMovie({favMovieId, rating, comment})
+    return updateFavMovie({favMovieId, rating, comment})
       .then(updatedMovie => {
         const moviesByImdbId = merge(this.state.moviesByImdbId, {[updatedMovie.imdb_id]: updatedMovie});
         this.setState({moviesByImdbId});
       })
   }
 
+  addToFavMovies(imdbID) {
+    return createFavMovie({imdb_id: imdbID})
+      .then(newFavMovie => {
+        const moviesByImdbId = merge(this.state.moviesByImdbId, {[newFavMovie.imdb_id]: newFavMovie});
+        this.setState({moviesByImdbId});
+      })
+  }
+
+  removeFavMovie(favMovieId) {
+    return deleteFavMovie(favMovieId)
+      .then(deletedFavMovie => {
+        const moviesByImdbId = Object.assign({}, this.state.moviesByImdbId);
+        const favMovieFields = ['comment', 'created_at', 'id', 'imdb_id', 'rating', 'updated_at', 'user_id']
+        favMovieFields.forEach(field => delete moviesByImdbId[deletedFavMovie.imdb_id][field]);
+        this.setState({moviesByImdbId});
+      })
+  }
+
   render() {
-    const { value, moviesByImdbId, loading } = this.state;
+    console.log(this.state);
+    const { value, moviesByImdbId, isLoading, error } = this.state;
     const movies = Object.values(moviesByImdbId);
     return (
       <div>
@@ -63,11 +89,13 @@ class Search extends React.Component {
             <SearchInput type="text" value={value} onChange={this.handleChange} />
             <SearchSubmit type="submit" value="Submit" />
         </SearchForm>
-        {loading?
+        {isLoading?
           <div>Loading...</div>
-          : movies.map(movie => {
+          : error ? 
+            <div>{error}</div>
+            : movies.map(movie => {
             return (
-              <Movie key={movie.imdbID} movie={movie} handleSubmitEdit={this.handleSubmitEdit}/>
+              <Movie key={movie.imdbID} movie={movie} addToFavMovies={this.addToFavMovies} handleSubmitEdit={this.handleSubmitEdit} removeFavMovie={this.removeFavMovie}/>
             );
           })
         }
