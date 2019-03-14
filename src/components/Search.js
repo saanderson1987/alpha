@@ -79,7 +79,6 @@ class Search extends React.Component {
   }
 
   render() {
-    console.log(this.state);
     const { value, moviesByImdbId, isLoading, error } = this.state;
     const movies = Object.values(moviesByImdbId);
     return (
@@ -104,18 +103,19 @@ class Search extends React.Component {
   }
 }
 
-
-
 export default Search;
 
 const SearchLabel = styled.div`
   margin-bottom: 10px;
+  font-size: 18px;
 `
 
 const SearchInput = styled.input`
   width: 350px;
-  padding: 6px;
+  padding: 10px;
   border: 1px solid black;
+  font-family: 'Lora', serif;
+  font-size: 16px;
 `
 
 const SearchSubmit = styled.input`

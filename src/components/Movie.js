@@ -2,44 +2,6 @@ import React from 'react';
 import styled, { css } from 'styled-components'
 import FavMovieInfo from './FavMovieInfo';
 
-// const Movie = (props) => {
-//   const { handleSubmitEdit, addToFavMovies } = props;
-//   const movie = props.movie || {};
-//   const { imdbID, Title, Year, Plot, rating, comment} = movie;
-//   const favMovieId = movie.id;
-//   const posterURL = movie.Poster === 'N/A' ? 
-//       'https://2fm.rte.ie/wp-content/uploads/2016/03/Film-Reel.jpg'
-//     : movie.Poster;
-//   return (
-//     <MovieBox>
-//       <MoviePoster src={posterURL}/>
-//       <MovieInfo>
-//         <div>
-//           <MovieHeader>
-//             <MovieTitle>{Title}</MovieTitle>
-//             { favMovieId ?
-//                 <i className="fas fa-heart"></i>
-//               : <AddToFavoritesIcon onClick={(e) => addToFavMovies(imdbID)}>
-//                   <i className="far fa-heart"></i>
-//                   <i className="fas fa-plus" style={{fontSize: 'xx-small'}}></i>
-//                 </AddToFavoritesIcon>
-//             }
-//           </MovieHeader>
-//           <MovieInfoItem>{Year}</MovieInfoItem>
-//           <MovieInfoItem>{Plot}</MovieInfoItem>
-//         </div>
-//         <div>
-//           { favMovieId ?
-//               <FavMovieInfo rating={rating} comment={comment} favMovieId={favMovieId} handleSubmitEdit={handleSubmitEdit}/>
-//             : ''
-//           }
-//         </div>
-//       </MovieInfo>
-//     </MovieBox>
-//   );
-// };
-
-
 class Movie extends React.Component {
   constructor(props) {
     super(props);
@@ -118,12 +80,14 @@ const MovieInfo = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  font-family: 'Lora', serif;
 `
 
 const MovieInfoItem = styled.div`
   margin: 10px 0px;
 `
 const MovieTitle = styled.div`
+  font-family: 'Montserrat', sans-serif;
   font-size: 26px;
   margin-right: 30px;
 `

@@ -18,10 +18,11 @@ const Bar = styled.div`
   display: flex;
 `
 const NavLink = styled.div`
+  font-size: 18px;
   border-right: 1px solid black;
   border-bottom: 1px solid black;
   padding: 20px;
-  width: 300px;
+  width: 420px;
   text-align: center;
   cursor: pointer;
   ${props => props.empty && css`

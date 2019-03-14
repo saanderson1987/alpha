@@ -20,7 +20,7 @@ class App extends React.Component {
   render() {
     const { selectedView } = this.state;
     return (
-      <div>
+      <AppContainer>
         <NavBar selectedView={selectedView} changeSelectedView={this.changeSelectedView} />
         <AppBody>
           {selectedView === 'search' ?
@@ -30,7 +30,7 @@ class App extends React.Component {
             <FavMovieList /> : ''
           }
         </AppBody>
-      </div>
+      </AppContainer>
     );
   }
 }
@@ -39,4 +39,8 @@ export default App;
 
 const AppBody = styled.div`
   margin: 40px;
+`
+const AppContainer = styled.div`
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 400;
 `
