@@ -1,95 +1,33 @@
-# React + Sinatra Starter
-_for [Heroku](https://www.heroku.com/) deployment_
+Live at https://alpha-movie-app.herokuapp.com/
+--Please allow a few moments for site to load, as the free-tier server goes to sleep after disuse--
 
-## OVERVIEW
-This is a simple starter to get you up and running with React & Sinatra. This is intended to provide:
+This app uses Sinatra on the back end and React on the front end.
+I have made use of a Sinatra-React [starter repo](https://github.com/alanbsmith/react-sinatra-example) to make setup easier.
 
-* a lightweight Webpack config (for development and production)
-* some helpful tooling for development workflow
-* Heroku-ready deployment setup
+The database is simple, consisting of just two tables, `users` and `favMovies`. Currently, the application has a single user whose id is hard coded in the application. A later version of the app would support multiple users. 
 
-#### WHY REACT + SINATRA?
-This starter has been a surprisingly valuable tool. Sinatra provides a really simple web framework for serving our React frontend. You can quickly add some API endpoints (and/or GraphQL) and connect ActiveRecord. We get all the benefits of using Ruby's simple syntax and predicability, and React's powerful rendering.
+The table `favMovies` has a foreign key `user_id` as well as the columns `comment` and `rating`. I would consider creating two separate tables to store these last two values in order to record information related to the creation and modification of these specific values, and even a history of the values using record effective end dating, but for the simple purposes of this task, I have opted to keep the values in the same table.
 
-## UP & RUNNING
-* Clone the repo
-* Install Ruby dependencies: `$ bundle install`
-* Install JS dependencies: `$ npm install` _or_ `$ yarn`
-* Fire up a dev server: `$ npm run dev` _or_ `$ yarn dev`
-* Visit `http://localhost:8080` in your browser
+`favMovies` also has a string column `imdb_id`, which links the record to a movie in the OMDB database.
 
-#### WHATS HAPPENING?
-When you run `npm run dev`, webpack is transpiling all your JS and CSS into a ghost file, `lib/app/public/bundle.js`. It then serves up the HTML file, `lib/app/views/index.html` on a ghost Express server on port 8080.
+The file `lib/app.rb` contains references to the application's routes, accessing the `favMovies` model and returning JSON representations of the favorite movie data.
 
-#### BUT WAIT, WE'RE NOT USING A SINATRA SERVER?
-That's correct. To use the Puma server for Sinatra with the transpiled assets, take a look at the [Production Build section](#production-build)
+The front end is divided into two main components, `<Search/>` and `<FavMovieList>`. `<Search/>` receives a search query from the user and calls the OMDB api to retrieve a list of movies that match the user's search query. When the list of movies is returned, the local api is then called for each movie in order to retrieve data related to the movie (if it is a favorite movie and the user's comments and rating), using the movie's `imdbID` and the current `userId`. If a corresponding record exists in the local database, it is displayed. 
 
-## LINTING
-To run the linter once:
-```
-$ npm run lint
-// or
-$ yarn lint
-```
+The user has the ability to add a movie on the list to their list of favorite movies by clicking the heart with the plus sign. From there, they may add a rating and comment.
 
-To run the watch task:
-```
-$ npm run lint:watch
-// or
-$ yarn lint:watch
-```
+To remove a movie from their favorite move list, the user has only to click the heart once more, and confirm removal. 
 
-## TESTING
-To run the tests:
-```
-$ npm test
-// or
-$ yarn test
-```
+I have decided to leave out the plot of the movie from the search list because the OMDB does not return that data from its search endpoint. That information could easily be added, however, by calling the OMDB endpoint which returns an individual movie's detailed information for every movie in the list, in the same way the the local api is called per movie.
 
-## PRODUCTION BUILD
+In addition to creating a search query, the user can view and edit their list of favorite movies by clicking on the 'My Favorite Movies' tab. The list is populated by calling the application's local api `favMovies` endpoint, which returns a list of favorite movies for the current user. Then, the the OMDB api is called per favorite movie in order to present the movie details related to the favorite movie. 
 
-- run `$ npm run build` _or_ `$ yarn build`
-- run `ruby lib/app.rb` (We're using Puma by default)
+Both components store their retrieved data in their React `state` object by using a object with keys representing the movie's `imdbID` and values representing objects containing movie data. This data structure was chosen over a simple array for performance reasons: items can easily be added, changed, or deleted without having to perform the multiple api calls required to populate the full list.
 
-This creates a transpiled asset file (`bundle.js`) of your JS and CSS in the `lib/app/public/` directory. This is great for production, but not so hot for development workflow as you would need to transpile _every time_ you made a change to the JS.
+One limitation of storing the retrieved data in each component's state is that the search query results are not saved-- if a user clicks from the 'Search for Movie' tab to the 'My Favorite Movies' tab, the query results are lost. Storing this data in a global application state, either in the `App` component, using the React Context api, or using a library like Redux, woud fix this issue. 
 
-## DEPLOYING TO HEROKU
-This app is set up for deployment to Heroku!
+If had had more time to complete this task, I would have added better error handling on all fronts. I also would have added tests. Normally I create tests at the same time as I develop, but to increase the velocity of this task, I forwent them. In addition, I would make the view adaptable to all media. Finally, it would probably be wise to refactor some of the components by extracting even more components to keep the code clean.
 
-_This assumes you have already have a Heroku account and have the [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli) installed_
+I have developed the UI with a primary focus of ease of use. I have acheived this by taking into account a sensible and familiar layout and organization of data. The view is clear and uncluttered. The sans serif font for headers is wide and pleasant, while the text for more detailed information like the movie plot and comments is a serif font that is easy to read. Familiar and attractive icons prevents cluttering the screen with large buttons and they provide quick access to manipulate data. 
 
-🚨 _Be sure to run the build script before deploying._ 🚨
-
-```
-$ heroku login
-$ heroku create -a name-of-your-app
-$ git push heroku master
-$ heroku open
-```
-
-If you're unfamiliar with Heroku deployment (or just need a refresher), they have a really great walkthrough [here](https://devcenter.heroku.com/articles/getting-started-with-nodejs#introduction).
-
-
-## CHANGELOG
-
-### v1.0.0
-This app has been updated to use React v15.5 and Webpack 2.3! 🎉
-
-**Major Changes:**
-
-* Updates React and ReactDOM to v15.5
-* Updates Webpack to v2.3
-* Enables hot-reloading for local development
-* Adds initial test suite with Enzyme, Expect, and Mocha
-
-**Minor Changes:**
-
-* Updates all other dependencies to latest
-* Updates eslint rules
-* Updates npm scripts
-* Adds yarn.lock
-* Updates README
-
-### v0.1.0
-Initial release. Basic setup for a React + Sinatra integration
+With more time, I might add the ability to finish entering or editing a comment by simply pressing the return key. I also might represent the rating with an animated image of starts. I fear that the way to remove a favorite movie is not immediately apparent (click a filled red heart to get the confirm remove dialog), but users of the popular Instagram app would quickly recognize this (unclick a heart in Instagram to 'unlike' a photo). Also, some might appreciate a more colorful UI as well as the addition of animations that begin when an item is clicked or hovered over to give it a more responsive and interactive feel.
