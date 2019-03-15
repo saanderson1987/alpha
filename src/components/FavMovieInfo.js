@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { css } from 'styled-components'
-import EditFavMovie from './EditFavMovie';
 
 class FavMovieInfo extends React.Component {
   constructor(props) {
@@ -45,8 +44,8 @@ class FavMovieInfo extends React.Component {
         <FavMovieInfoHeader>
           <div>My info:</div>
           {inEditMode ? 
-              <i className="far fa-check-circle" onClick={this.handleSubmit}></i>
-            : <i className="far fa-edit" onClick={this.toggleEditMode}></i>
+              <CheckMark className="far fa-check-circle" onClick={this.handleSubmit}></CheckMark>
+            : <EditInfoIcon className="far fa-edit" onClick={this.toggleEditMode}></EditInfoIcon>
           }
         </FavMovieInfoHeader>
         <FavMovieDetails>
@@ -81,13 +80,22 @@ class FavMovieInfo extends React.Component {
 export default FavMovieInfo;
 
 const FavMovieInfoContainer = styled.div`
-  border: 1px dotted black;
+  border: 1px dotted #8e8e8e;
+  margin: 10px 30px 0px 0px;
 `
 const FavMovieInfoHeader = styled.div`
-  margin: 5px 5px 0px;
+  margin: 0px 5px 0px;
   font-variant: all-small-caps;
   display: flex;
   justify-content: space-between;
+`
+
+const EditInfoIcon = styled.i`
+  margin-top: 5px;
+`
+
+const CheckMark = styled(EditInfoIcon)`
+  color: green;
 `
 
 const FavMovieDetails = styled.div`
@@ -105,7 +113,13 @@ const FavMovieComment = styled.div`
 
 const RatingSelect = styled.select`
   margin-left: 10px;
+  font-family: 'Lora', serif;
+  // font-size: 14px;
 `
-const CommentInput = styled.input`
+const CommentInput = styled.textarea`
   margin: 0px 0px 10px 10px;
+  border: 1px solid #e8e8e8;
+  width: 300px;
+  font-family: 'Lora', serif;
+  font-size: 16px;
 `

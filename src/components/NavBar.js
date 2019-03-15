@@ -19,8 +19,8 @@ const Bar = styled.div`
 `
 const NavLink = styled.div`
   font-size: 18px;
-  border-right: 1px solid black;
-  border-bottom: 1px solid black;
+  border-right: 1px solid #e1e1e1;
+  border-bottom: 1px solid #e1e1e1;
   padding: 20px;
   width: 420px;
   text-align: center;

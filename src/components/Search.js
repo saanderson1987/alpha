@@ -113,16 +113,18 @@ const SearchLabel = styled.div`
 const SearchInput = styled.input`
   width: 350px;
   padding: 10px;
-  border: 1px solid black;
+  border: 1px solid #d2d2d2;
   font-family: 'Lora', serif;
   font-size: 16px;
 `
 
 const SearchSubmit = styled.input`
   margin-left: 20px;
-  border: 1px solid black;
+  border: 1px solid #d2d2d2;
   border-radius: 3px;
   padding: 4px 16px;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 16px;
 `
 const SearchForm = styled.form`
   margin-bottom: 30px;

@@ -34,10 +34,10 @@ class Movie extends React.Component {
                   hasClickedRemove ?
                       <RemoveFavoriteLine>
                         <div>Remove Favorite?</div>
-                        <RemoveFavoriteIcon onClick={(e) => removeFavMovie(favMovieId)} className="far fa-check-circle"></RemoveFavoriteIcon>
+                        <CheckMark onClick={(e) => removeFavMovie(favMovieId)} className="far fa-check-circle"></CheckMark>
                         <RemoveFavoriteIcon onClick={this.toggleHasClickedRemove} className="fas fa-undo-alt"></RemoveFavoriteIcon>
                       </RemoveFavoriteLine>
-                    : <div><i onClick={this.toggleHasClickedRemove} className="fas fa-heart"></i></div>
+                    : <div><Heart onClick={this.toggleHasClickedRemove} className="fas fa-heart"></Heart></div>
                 : <AddToFavoritesIcon onClick={(e) => addToFavMovies(imdbID)}>
                     <i className="far fa-heart"></i>
                     <i className="fas fa-plus" style={{fontSize: 'xx-small'}}></i>
@@ -62,7 +62,7 @@ class Movie extends React.Component {
 export default Movie;
 
 const MovieBox = styled.div`
-  border: 1px solid black;
+  border: 1px solid #e1e1e1;
   margin-bottom: 30px;
   width: 650px;
   padding: 20px;
@@ -72,10 +72,11 @@ const MovieBox = styled.div`
 const MoviePoster = styled.img`
   width: 150px;
   height: 225px;
+  align-self: flex-start;
 ` 
 
 const MovieInfo = styled.div`
-  margin-left: 20px;
+  margin-left: 50px;
   width: 100%;
   display: flex;
   flex-direction: column;
@@ -84,7 +85,7 @@ const MovieInfo = styled.div`
 `
 
 const MovieInfoItem = styled.div`
-  margin: 10px 0px;
+  margin: 10px 30px 0px 0px;
 `
 const MovieTitle = styled.div`
   font-family: 'Montserrat', sans-serif;
@@ -107,3 +108,10 @@ const RemoveFavoriteLine = styled.div`
 const RemoveFavoriteIcon = styled.i`
   margin-left: 14px;
 `
+const CheckMark = styled(RemoveFavoriteIcon)`
+  color: green;
+`
+
+const Heart = styled.i`
+  color: #b50000;
+`;
