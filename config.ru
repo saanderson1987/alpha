@@ -2,6 +2,9 @@ require './lib/app'
 
 use Rack::Static,
   :urls => [""],
-  :root => "lib/app/public"
+  :root => "public"
+
+run Rack::File.new("public")
+
 
 run Sinatra::Application
