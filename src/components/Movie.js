@@ -25,7 +25,8 @@ class Movie extends React.Component {
       : movie.Poster;
     return (
       <MovieBox>
-        <MoviePoster src={posterURL}/>
+        <MoviePosterContainer><MoviePoster src={posterURL}/></MoviePosterContainer>
+        
         <MovieInfo>
           <div>
             <MovieHeader>
@@ -69,6 +70,10 @@ const MovieBox = styled.div`
   overflow: auto;
   display: flex;
 `
+
+const MoviePosterContainer = styled.div`
+`
+
 const MoviePoster = styled.img`
   width: 150px;
   height: 225px;

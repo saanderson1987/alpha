@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components'
+import styled from 'styled-components';
 import NavBar from './NavBar';
 import Search from './Search';
 import FavMovieList from './FavMovieList';
@@ -7,13 +7,13 @@ import FavMovieList from './FavMovieList';
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {selectedView: 'search'};
+    this.state = { selectedView: 'search' };
     this.changeSelectedView = this.changeSelectedView.bind(this);
   }
 
   changeSelectedView(view) {
     if (view !== this.state.selectedView) {
-      this.setState({selectedView: view});
+      this.setState({ selectedView: view });
     }
   }
 
@@ -21,7 +21,10 @@ class App extends React.Component {
     const { selectedView } = this.state;
     return (
       <AppContainer>
-        <NavBar selectedView={selectedView} changeSelectedView={this.changeSelectedView} />
+        <NavBar 
+          changeSelectedView={this.changeSelectedView} 
+          selectedView={selectedView} 
+        />
         <AppBody>
           {selectedView === 'search' ?
             <Search /> : ''
@@ -39,8 +42,9 @@ export default App;
 
 const AppBody = styled.div`
   margin: 40px;
-`
+`;
+
 const AppContainer = styled.div`
   font-family: 'Montserrat', sans-serif;
   font-weight: 400;
-`
+`;

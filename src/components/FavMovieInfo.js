@@ -1,5 +1,5 @@
 import React from 'react';
-import styled, { css } from 'styled-components'
+import styled from 'styled-components';
 
 class FavMovieInfo extends React.Component {
   constructor(props) {
@@ -14,17 +14,17 @@ class FavMovieInfo extends React.Component {
   componentDidUpdate(prevProps) {
     if (this.props.rating !== prevProps.rating || this.props.comment !== prevProps.comment) {
       const { rating, comment } = this.props;
-      this.setState({rating, comment});
+      this.setState({ rating, comment });
     }
   }
 
   toggleEditMode() {
     const inEditMode = this.state.inEditMode ? false : true;
-    this.setState({inEditMode});
+    this.setState({ inEditMode });
   }
 
   handleChange(type, value) {
-    this.setState({[type]: value});
+    this.setState({ [type]: value });
   }
 
   handleSubmit(e) {
@@ -34,7 +34,7 @@ class FavMovieInfo extends React.Component {
     this.props.handleSubmitEdit({favMovieId, rating, comment})
       .then(() => {
         this.setState({inEditMode: false});
-      })
+      });
   }
 
   render() {
@@ -81,45 +81,47 @@ export default FavMovieInfo;
 
 const FavMovieInfoContainer = styled.div`
   border: 1px dotted #8e8e8e;
-  margin: 10px 30px 0px 0px;
-`
+  margin: 20px 30px 0px 0px;
+`;
+
 const FavMovieInfoHeader = styled.div`
   margin: 0px 5px 0px;
   font-variant: all-small-caps;
   display: flex;
   justify-content: space-between;
-`
+`;
 
 const EditInfoIcon = styled.i`
   margin-top: 5px;
-`
+`;
 
 const CheckMark = styled(EditInfoIcon)`
   color: green;
-`
+`;
 
 const FavMovieDetails = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 
 const FavMovieInfoItem = styled.div`
   margin: 10px 10px;
-`
+`;
 
 const FavMovieComment = styled.div`
   width: 350px;
-`
+`;
 
 const RatingSelect = styled.select`
   margin-left: 10px;
   font-family: 'Lora', serif;
   // font-size: 14px;
-`
+`;
+
 const CommentInput = styled.textarea`
   margin: 0px 0px 10px 10px;
   border: 1px solid #e8e8e8;
   width: 300px;
   font-family: 'Lora', serif;
   font-size: 16px;
-`
+`;
