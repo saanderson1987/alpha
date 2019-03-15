@@ -8,3 +8,4 @@ gem 'pg'
 gem 'puma'
 gem 'rake'
 gem 'sinatra'
+gem "sinatra-activerecord"
