@@ -2,7 +2,7 @@ require 'sinatra'
 require 'json'
 require 'active_record'
 # ActiveRecord::Base.establish_connection('postgres://localhost:5432/alpha')
-ActiveRecord::Base.establish_connection(
+ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'] ||
   { :adapter => 'postgresql',
     :database => 'alpha',
     :host => 'localhost',

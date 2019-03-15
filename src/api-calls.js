@@ -2,12 +2,12 @@ const OMDB_API_KEY = '569a050d';
 const USER_ID = 3;
 
 export function searchMovies (title) {
-  return fetch(`http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}`)
+  return fetch(`https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&s=${title}`)
     .then(res => res.json());
 }
 
 export function getMovieByImdbId (imdbId) {
-  return fetch(`http://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`)
+  return fetch(`https://www.omdbapi.com/?apikey=${OMDB_API_KEY}&i=${imdbId}`)
     .then(res => res.json());
 }
 
